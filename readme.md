@@ -72,7 +72,7 @@ python init_db_omop.py
 
 4. **Run app.py**
 ```bash
-streamlit run "Terminology Browser.py"
+streamlit run "app.py"
 ```
 5. **Open the browser at http://localhost:8501**
 

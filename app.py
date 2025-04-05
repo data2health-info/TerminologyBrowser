@@ -104,7 +104,7 @@ def generate_fhir_valueset(name: str, concepts: List[Dict]) -> Dict:
     return fhir_valueset
 
 # --- Streamlit UI
-st.title("Terminology Code Search for AMRonFHIR Nepal")
+st.title("Terminology Search for AMRonFHIR Nepal")
 
 search_term = st.text_input("Search Term")
 vocab_filter = st.selectbox("Filter by Vocabulary", options=["", "SNOMED", "LOINC", "RxNorm"])
