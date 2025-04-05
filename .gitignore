@@ -1,0 +1,9 @@
+# Ignore the .venv virtual environment directory
+.venv/
+
+# File extensions to ignore
+*.csv
+*.pyc
+*.sqlite
+*.db
+
