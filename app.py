@@ -176,11 +176,9 @@ def generate_fhir_valueset(name: str, concepts: List[Dict]) -> Dict:
     return fhir_valueset
 
 # --- Streamlit UI ---
-# (The Streamlit UI part remains largely the same as the previous version)
-# Key parts that interact with search_concepts already handle the parameters.
 st.set_page_config(layout="wide")
 st.title("Terminology Search & ValueSet Builder")
-st.caption(f"Using OMOP Vocabulary from: `{DB_PATH}` | Current Time: {pd.Timestamp.now(tz='America/New_York').strftime('%Y-%m-%d %H:%M:%S %Z')}") # Use current time based on guideline
+st.caption(f"Using OMOP Vocabulary from: `{DB_PATH}` | Current Time: {pd.Timestamp.now(tz='Nepal/Kathmandu').strftime('%Y-%m-%d %H:%M:%S %Z')}") # Use current time based on guideline
 
 
 # --- Main Search Section ---
@@ -188,9 +186,9 @@ st.header("1. Search Concepts")
 col1, col2, col3 = st.columns(3)
 with col1:
     search_term = st.text_input("Search Term", key="main_search_term")
-    search_by = st.selectbox("Search By", options=["string", "code"], index=0, key="main_search_by") # Default to string
+    search_by = st.selectbox("Search By", options=["string", "code"], index=0, key="main_search_by")
 with col2:
-    vocab_filter = st.selectbox("Filter by Vocabulary", options=["", "SNOMED", "LOINC", "RxNorm"], index=0, key="main_vocab") # Default to no filter
+    vocab_filter = st.selectbox("Filter by Vocabulary", options=["", "SNOMED", "LOINC", "RxNorm"], index=0, key="main_vocab")
     # Conditionally enable fuzzy checkbox based on search_by selection
     is_string_search = (search_by == "string")
     fuzzy_enabled = st.checkbox("Enable Fuzzy Search", value=False, key="main_fuzzy_check", disabled=not is_string_search, help="Uses fuzzy matching for 'string' searches. Results include a similarity score (0-100).")
@@ -238,15 +236,14 @@ if 'search_results' in st.session_state:
             display_columns.remove('score')
             display_columns.append('score')
             df_concepts = df_concepts[display_columns]
-            st.dataframe(df_concepts, use_container_width=True, height=300) # Limit height
+            st.dataframe(df_concepts, use_container_width=True, height=300) 
         else:
-            st.dataframe(df_concepts, use_container_width=True, height=300) # Limit height
-
+            st.dataframe(df_concepts, use_container_width=True, height=300)
         csv = df_concepts.to_csv(index=False).encode('utf-8')
         st.download_button(
             "Download Concepts as CSV",
             csv,
-            f"{search_term or 'concepts'}_results.csv", # Use search term in filename
+            f"{search_term or 'concepts'}_results.csv", 
             "text/csv",
             key='download-concepts-csv'
         )
@@ -275,8 +272,7 @@ if 'search_results' in st.session_state:
         st.info("No concepts found matching your criteria.")
 
 
-st.divider() # Visual separator
-
+st.divider() 
 # --- Build from SNOMED Ancestors Section ---
 st.header("2. Build ValueSet from SNOMED CT Ancestors")
 st.write("Find SNOMED concepts, then retrieve all their descendant concepts to build a ValueSet.")
@@ -284,7 +280,7 @@ st.write("Find SNOMED concepts, then retrieve all their descendant concepts to b
 col_anc1, col_anc2, col_anc3 = st.columns(3)
 with col_anc1:
     ancestor_search = st.text_input("Search SNOMED Ancestor Term", key="anc_search_term")
-    ancestor_search_by = st.selectbox("Search Ancestor By", options=["string", "code"], index=0, key="anc_search_by") # Default string
+    ancestor_search_by = st.selectbox("Search Ancestor By", options=["string", "code"], index=0, key="anc_search_by") 
 with col_anc2:
     is_anc_string_search = (ancestor_search_by == "string")
     ancestor_fuzzy_enabled = st.checkbox("Enable Fuzzy Search", value=False, key="anc_fuzzy_check", disabled = not is_anc_string_search, help="Uses fuzzy matching for 'string' ancestor searches.")
@@ -301,7 +297,7 @@ if search_ancestors_clicked:
         with st.spinner("Searching for ancestors..." + (" (fuzzy)" if perform_fuzzy_anc else "")):
             snomed_concepts = search_concepts(
                 ancestor_search,
-                "SNOMED", # Hardcoded for this section
+                "SNOMED", 
                 search_by=ancestor_search_by,
                 fuzzy=perform_fuzzy_anc,
                 threshold=ancestor_fuzzy_threshold
@@ -337,9 +333,9 @@ if 'ancestor_candidates' in st.session_state:
              display_columns_anc.remove('score')
              display_columns_anc.append('score')
              df_snomed = df_snomed[display_columns_anc]
-             st.dataframe(df_snomed, use_container_width=True, height=200) # Limit height
+             st.dataframe(df_snomed, use_container_width=True, height=200)
         else:
-            st.dataframe(df_snomed, use_container_width=True, height=200) # Limit height
+            st.dataframe(df_snomed, use_container_width=True, height=200) 
 
 
         csv_anc = df_snomed.to_csv(index=False).encode('utf-8')
@@ -385,7 +381,7 @@ if 'descendant_results' in st.session_state:
 
     if descendants_data:
         df_descendants = pd.DataFrame(descendants_data)
-        st.dataframe(df_descendants, use_container_width=True, height=300) # Limit height
+        st.dataframe(df_descendants, use_container_width=True, height=300) 
 
         csv_desc = df_descendants.to_csv(index=False).encode('utf-8')
         st.download_button(
@@ -426,4 +422,4 @@ if 'descendant_results' in st.session_state:
 # --- Footer/Info ---
 st.divider()
 st.markdown("---")
-st.caption(f"FHIR Systems Used: `{', '.join(FHIR_SYSTEMS.keys())}`")
+st.caption(f"data2health.info | To facilitate AMRonFHIR implementation for Vendors") # 
