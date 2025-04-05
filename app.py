@@ -178,7 +178,7 @@ def generate_fhir_valueset(name: str, concepts: List[Dict]) -> Dict:
 # --- Streamlit UI ---
 st.set_page_config(layout="wide")
 st.title("Terminology Search & ValueSet Builder")
-st.caption(f"Using OMOP Vocabulary from: `{DB_PATH}` | Current Time: {pd.Timestamp.now(tz='Nepal/Kathmandu').strftime('%Y-%m-%d %H:%M:%S %Z')}") # Use current time based on guideline
+st.caption(f"Using OMOP Vocabulary from: `{DB_PATH}` | Current Time: {pd.Timestamp.now(tz='Asia/Kathmandu').strftime('%Y-%m-%d %H:%M:%S %Z')}") # Use current time based on guideline
 
 
 # --- Main Search Section ---
